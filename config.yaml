@@ -1,0 +1,114 @@
+dictionaries:
+  full: dictionaries/2022_full.json
+  stop: dictionaries/stop_list.txt
+  full_jieba : dictionaries/2022.txt
+  exclusions: dictionaries/exclusions.txt
+  refined: dictionaries/June_dic_refined.json
+  unseen: dictionaries/unseen_dictionaries.json
+  suffix: dictionaries/2022_suffix.json
+
+setting:
+  merging: OFF ## enable entity merging during the training data generating process
+  unseen_dic: OFF  # weather to save unseen dictionaries
+  ner_on: True  ## ****crucial!!!! 
+    ### when ner model is enabled during pre-labeling task, sequences will be labeled by both dictionaries and ner model
+    ### 在还没有训练好该本体的NER模型时，设置为False，如果已经有模型则设置为True
+
+
+server:
+  ner: http://192.168.4.31:8534/NERAPI
+
+## original text file folders or csv  
+corpus:  
+  manuals: input_data/books_m/
+  clinicals: input_data/books_n/
+  instructions: input_data/drug_all.csv
+  knowledge_base: input_data
+
+#preprocessed data
+training_data:
+  ner_training: data/Juli/
+  ner_training_cleaned: data/Juli_cleaned
+  ner_training_reformatted: data/reformatted
+  ner_training_final: ner/data/new_training
+
+data_files:
+  preprocessed_manual: preprocessed/manual.csv
+  preprocessed_clinical: preprocessed/clinical.csv
+  preprocessed_kbms: preprocessed/kbms.csv
+
+results:
+  group: results/groups.csv # 人群禁忌结果
+  ner_results: ner/ner_results #其他ner结果表存储路径
+
+
+model_path: ner/models/model_2022
+model_version: 1
+# ner模型存储路径
+prediction_model: ['params_o_cnn_d.pkl','params_o_cnn_c.pkl','params_o_cnn_kd.pkl','params_o_cnn_m.pkl', 'params_o_cnn_a.pkl'] 
+prediction_model: ['params_o_cnn_kd.pkl','params_o_cnn_a.pkl', 'params_o_cnn_c.pkl','params_o_cnn_d.pkl'] 
+## 多语料多模型预测时所选用的模型名称
+evaluation_path: ner/models/evaluation
+## 选做多语料预测的模型列表（需要在Model_path路径下）
+
+ontologies: 
+  RE: {'DIS': '疾病',
+        'BFL': '体液',
+        'EQM':'医疗器械',
+        'SUR': '操作',
+        'SYM': '临床表现',
+        'TES': '观测操作',
+        'ORG': '人体组织形态',
+        'DRU': '药品',
+        'OGN': '生物',
+        'OBJ': '物质'}
+  ## NER模型抽取的且为我们感兴趣的并且会后续构成三元组的那些实体类型
+  RE_nonessential: { "DEG": "程度词",
+              "FW": "频率词",
+              "DUR": "时间段",
+              "TP": "时间点",
+              "TES": "检查",
+              "CL": "条件词",
+              "PSB": "可能性词",
+              "PT": "既往信息词",
+              "AT": "否认词",
+              "O": "非关键词",
+              "NBP": "待处理",
+              "BRS": "血亲情况",
+              "SPS": "配偶状况"}
+  # NER模型抽取的其他实体类型
+  jieba_inverted: {'DIS': 'ds',
+                    'BFL': 'bl',
+                    'EQM':'eq',
+                    'SUR': 'sr',
+                    'SYM': 'sm',
+                    'TES': 'ts',
+                    'ORG': 'og',
+                    'DRU': 'du',
+                    'OGN': 'om',
+                    'FW': 'fw',
+                    'DEG': 'dg',
+                    'DUR': 'dr',
+                    'O': 'oo',
+                    'AT': 'at',
+                    'PT': 'pt',
+                    'PSB': 'pb',
+                    'EXP': 'ep',
+                    'OBJ': 'oj'}
+  # 将实体类型映射为jieba词典 可支持分词的小写字母长度为2 的形式
+
+  ontology_mapping: {'DIS':'omahaT018',
+                  'SYM':'omahaT001',
+                  'BFL':'omahaT005',
+                  'DEG':'omahaT028',
+                  'FW':'omahaT044',
+                  'TES':'omahaT065',
+                  'ORG':'omahaT010',
+                  'OGN':'omahaT011',
+                  'SUR':'omahaT002',
+                  'MAT':'omahaT033',
+                  'DRU':'omahaT004',
+                  'OBJ':'omahaT005',
+                  'DUR':'omahaT054',
+                  'EQM':'omahaT033',
+                  }
